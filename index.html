@@ -20,7 +20,15 @@
   </style>
 </head>
 <body>
-  <iframe src="http://eosdaq.test:3000/embed/IQ_SYS" frameBorder="0"></iframe>
+    <script src="https://cdn.scattercdn.com/file/scatter-cdn/js/latest/scatterjs-core.min.js"></script>
+    <script src="https://cdn.scattercdn.com/file/scatter-cdn/js/latest/scatterjs-plugin-eosjs.min.js"></script>
+    <button id="scatter-signin">
+      Sign in with scatter
+    </button>
+    <button id="scatter-signout">
+      Sign out
+    </button>
+  <iframe id="eosdaq" src="http://eosdaq.test:3000/embed/IQ_SYS" frameBorder="0"></iframe>
   <script type="text/javascript" src="./index.js"></script>
 </body>
 </html>
