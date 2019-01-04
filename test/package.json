@@ -13,7 +13,7 @@
     "parcel-bundler": "^1.11.0"
   },
   "dependencies": {
-    "eosdaq": "0.0.1",
+    "eosdaq": "^0.0.1",
     "eosjs": "^16.0.9",
     "scatterjs-core": "^2.6.0",
     "scatterjs-plugin-eosjs": "^1.4.0"

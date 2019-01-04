@@ -1,5 +1,5 @@
 import 'babel-polyfill';
-import Eosdaq from 'eosdaq';
+import Eosdaq from '../eosdaq';
 import Eos from 'eosjs';
 import ScatterJS from 'scatterjs-core';
 import ScatterEOS from 'scatterjs-plugin-eosjs';
@@ -14,6 +14,6 @@ const network = {
 }
 
 const eosdaq = new Eosdaq(
-  '#eosdaq',
+  'eosdaq',
   {},
 );

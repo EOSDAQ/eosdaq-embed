@@ -1,23 +1,23 @@
 class Eosdaq {
-  static embedDomain = 'http://eosdaq.test:3000';
-  static embedSource = 'http://eosdaq.test:3000/embed/IQ_SYS';  
-  static network = {
-    chainId: "8be32650b763690b95b7d7e32d7637757a0a7392ad04f1c393872e525a2ce82b",
-  };
-
   constructor(container, config) {
     this.container = container;
     this.config = config;
     this.childProcess;
     this.iframe;
-    this.onLoadQueue = [];
+    this.queue = [];
     this.isLoaded = false;
+    this.embedDomain = 'http://eosdaq.test:3000';
+    this.embedSource = 'http://eosdaq.test:3000/embed/IQ_SYS';
+    this.network = {
+      blockchain: "eos",
+      chainId: "8be32650b763690b95b7d7e32d7637757a0a7392ad04f1c393872e525a2ce82b",
+    };
     this.renderEosdaq();
     window.addEventListener('message', this.onMessage);
   }
 
   onMessage(e) {
-    if (e.origin !== embedDomain) {
+    if (e.origin !== this.embedDomain) {
       return;
     }
     const { data } = e;
@@ -28,18 +28,24 @@ class Eosdaq {
 
   renderEosdaq() {
     const div = document.getElementById(this.container);
-    this.iframe = document.createElement('iframe');    
-    this.iframe.src = embedSource;
+    const oldies = div.getElementsByTagName('iframe');
+    if (oldies && oldies.length > 0) {
+      for (let oldFrame of oldies) {
+        div.removeChild(oldFrame);
+      }
+    }
+    this.iframe = document.createElement('iframe');
+    this.iframe.src = this.embedSource;
     this.iframe.onload = this.onLoad();
-    div.appendChild(iframe);
-    this.childProcess = iframe.contentWindow;
+    div.appendChild(this.iframe);
+    this.childProcess = this.iframe.contentWindow;
   }
 
   sendMessage(action, payload) {
     this.childProcess.postMessage({
       action,
       payload,
-    }, embedDomain);
+    }, this.embedDomain);
   }
 
   onLoad() {
@@ -66,8 +72,8 @@ class Eosdaq {
     this.sendMessage('forgetIdentity');
   }
 
-  async transaction(tx) {    
-    scatter.getIdentity(this.config.network || this.childProcess.network);
+  async transaction(tx) {
+    scatter.getIdentity(this.config.network || this.network);
     await this.eos.transaction(tx)
   }
   
