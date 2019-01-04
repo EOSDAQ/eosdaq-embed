@@ -11,38 +11,49 @@ const network = {
 
 const signin = document.getElementById('scatter-signin')
 const signout = document.getElementById('scatter-signout')
-const result = ScatterJS.scatter.connect('Persian Pink')
 const iframe = document.getElementById('eosdaq').contentWindow;
 
-function Eosdaq(scatter) {
-  this.scatter = scatter;
+function Eosdaq() {
+  // this.scatter = window.ScatterJS.scatter;
+  var that = this;
 
-  var ___messageToEosdaq = (action, payload) => {
+  var sendMessage = (action, payload) => {
     var message = {
       action: action,
       payload: payload || '',
     };
   
-    iframe.postMessage(JSON.stringify(message), iframeDomain);
+    iframe.postMessage(message, iframeDomain);
   }
 
-  this.login = (payload) => {
-    __messageToEosdaq('getIdentity', payload);
+
+  this.getScatter = () => {
+    return this.scatter;
+  }
+
+  this.login = (scatter, eos) => {
+    this.scatter = scatter;
+    this.eos = eos;
+    console.log(scatter);
+    sendMessage('getIdentity', scatter.identity);
   };
 
   this.logout = () => {
-    __messageToEosdaq('forgetIdentity');
+    this.scatter = null;
+    this.eos = null;
+    sendMessage('forgetIdentity');
   };
 
-  this.transfer = (data) => {
-    this.scatter.eos.transaction(data).then(() => {
-      ___messageToEosdaq('transferResult', {
+  this.transaction = (transaction) => {
+    this.eos.transaction(transaction).then((result) => {
+      sendMessage('transactionResult', {
         success: true,
+        result,
       });
     }).catch((err) => {
-      ___messageToEosdaq('transferResult', {
-        success: true,
-        err: err
+      sendMessage('transactionResult', {
+        success: false,
+        result: err,
       });
     })
   }
@@ -51,10 +62,10 @@ function Eosdaq(scatter) {
     if (e.origin !== iframeDomain) {
       return;
     }
-    
+
     var data = e.data;
-    if (data.action === 'transfer') {
-      this.transfer(JSON.parse(data));
+    if (data.action === 'transaction') {
+      that.transaction(data.payload);
     }
   }
 
@@ -65,37 +76,28 @@ function Eosdaq(scatter) {
   }
 }
 
-window.eosdaq = new Eosdaq(window.scatter);
+const eosdaq = new Eosdaq();
 
 signin.onmousedown = async (e) => {
   e.preventDefault()
-  const payload = await ScatterJS.scatter.getIdentity({
-    accounts: [network]
-  })
+  ScatterJS.plugins(new ScatterEOS());
+  ScatterJS.scatter.connect('Persian Pink')
+    .then(async () => {
+      await ScatterJS.scatter.getIdentity({
+        accounts: [network]
+      })
+      const eos = ScatterJS.scatter.eos(network, Eos, {});
+      eosdaq.login(ScatterJS.scatter, eos)
+    })
 
-  iframe.postMessage({
-    action: 'getIdentity',
-    payload,
-  }, 'http://eosdaq.test:3000')
+  // iframe.postMessage({
+  //   action: 'getIdentity',
+  //   payload,
+  // }, 'http://eosdaq.test:3000')
 }
 
 signout.onmousedown = (e) => {
   e.preventDefault()
   ScatterJS.scatter.forgetIdentity()
-
-  iframe.postMessage({
-    action: 'forgetIdentity'
-  })
+  eosdaq.logout()
 }
-
-
-
-
-
-// window.onmessage = (e) => {
-//   e.origin === 'iframeDomain'
-//   action: transfer
-
-//   result = ScatterJS.scatter.eos.transfer(payload)
-//   iframe.postMessage(result)
-// }
