@@ -2,7 +2,7 @@
   "name": "persian-pink",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "eosdaq.js",
   "scripts": {
     "start": "http-server ./ -p 4000",
     "build": "rollup -c"
