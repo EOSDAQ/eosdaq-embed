@@ -17,3 +17,15 @@ const eosdaq = new Eosdaq(
   'eosdaq',
   {},
 );
+
+ScatterJS.plugins(new ScatterEOS())
+ScatterJS.scatter.connect('EOSDAQ')
+  .then(c => {
+    if (!c) {
+      console.log('Failed to connect');
+      return;
+    }
+
+    const eos = ScatterJS.scatter.eos(network, Eos, {});
+    eosdaq.login(ScatterJS.scatter, eos);
+  })

@@ -7,12 +7,13 @@ class Eosdaq {
     this.queue = [];
     this.isLoaded = false;
     this.embedDomain = 'http://eosdaq.test:3000';
-    this.embedSource = 'http://eosdaq.test:3000/embed/IQ_SYS';
+    this.embedSource = 'http://eosdaq.test:3000/exchange/IQ_SYS';
     this.network = {
       blockchain: "eos",
       chainId: "8be32650b763690b95b7d7e32d7637757a0a7392ad04f1c393872e525a2ce82b",
     };
     this.renderEosdaq();
+    this.onMessage = this.onMessage.bind(this);
     window.addEventListener('message', this.onMessage);
   }
 
@@ -23,6 +24,10 @@ class Eosdaq {
     const { data } = e;
     if (data.action === 'transaction') {
       this.transaction(data.payload);
+    }
+
+    if (data.action === 'ready') {
+      this.onLoad();
     }
   }
 
@@ -36,7 +41,8 @@ class Eosdaq {
     }
     this.iframe = document.createElement('iframe');
     this.iframe.src = this.embedSource;
-    this.iframe.onload = this.onLoad();
+    this.iframe.frameBorder = 0;
+    // this.iframe.onload = this.onLoad();
     div.appendChild(this.iframe);
     this.childProcess = this.iframe.contentWindow;
   }
@@ -59,6 +65,7 @@ class Eosdaq {
   login(scatter, eos) {
     this.scatter = scatter;
     this.eos = eos;
+    // console.log(this.isLoaded);
     if (this.isLoaded) {
       this.sendMessage('getIdentity', scatter.identity);
     } else {
@@ -74,7 +81,25 @@ class Eosdaq {
 
   async transaction(tx) {
     scatter.getIdentity(this.config.network || this.network);
-    await this.eos.transaction(tx)
+    const action = 'transactionResult';
+    let payload;
+
+    try {
+      const result = await this.eos.transaction(tx);
+      payload = {
+        success: true,
+        data: result,
+        error: null,
+      };
+    } catch (error) {
+      payload = {
+        success: false,
+        data: null,
+        error,
+      }
+    }
+
+    this.sendMessage(action, payload);
   }
   
   destroy() {
