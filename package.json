@@ -1,9 +1,9 @@
 {
-  "name": "@eosdaq/core",
-  "version": "0.0.1",
+  "name": "eosdaq",
+  "version": "0.0.2",
   "description": "",
   "main": "dist/bundle.eosdaq.js",
-  "scripts": {
+  "scripts": { 
     "test": "parcel-bundler watch test/index.html",
     "build": "rollup -c"
   },
