@@ -28,4 +28,11 @@ ScatterJS.scatter.connect('EOSDAQ')
 
     const eos = ScatterJS.scatter.eos(network, Eos, {});
     eosdaq.login(ScatterJS.scatter, eos);
+
+    // setTimeout(() => {
+    //   eosdaq.logout();
+    //   setTimeout(() => {
+    //     eosdaq.login(ScatterJS.scatter, eos);
+    //   }, 4000)
+    // }, 1000)
   })

@@ -7,7 +7,7 @@ class Eosdaq {
     this.queue = [];
     this.isLoaded = false;
     this.embedDomain = 'http://eosdaq.test:3000';
-    this.embedSource = 'http://eosdaq.test:3000/exchange/IQ_SYS';
+    this.embedSource = 'http://eosdaq.test:3000/embed/IQ_SYS';
     this.network = {
       blockchain: "eos",
       chainId: "8be32650b763690b95b7d7e32d7637757a0a7392ad04f1c393872e525a2ce82b",
@@ -80,7 +80,6 @@ class Eosdaq {
   }
 
   async transaction(tx) {
-    scatter.getIdentity(this.config.network || this.network);
     const action = 'transactionResult';
     let payload;
 
