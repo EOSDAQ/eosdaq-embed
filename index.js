@@ -1,4 +1,5 @@
-var iframeDomain = 'http://eosdaq.test:3000';
+
+var iframeDomain = 'http://test.eosdaq.test:3000';
 
 const network = {
   blockchain: "eos",

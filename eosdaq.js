@@ -1,16 +1,15 @@
 class Eosdaq {
   constructor(container, config) {
-    super(props);
     this.container = container;
     this.config = config;
     this.childProcess;
     this.iframe;
-    this.renderEosdaq()
+    this.renderEosdaq();
   }
 
   renderEosdaq() {
-    const div = document.getElementById(this.container)
-    this.iframe = document.createElement('iframe')
+    const div = document.getElementById(this.container);
+    this.iframe = document.createElement('iframe');
     this.childProcess = iframe.contentWindow;
     iframe.src = `http://eosdaq.test:3000/embed/IQ_SYS`;
 
@@ -37,8 +36,8 @@ class Eosdaq {
   }
 
   async transaction(tx) {
-    const await this.eos.transaction(tx)
+    await this.eos.transaction(tx)
   }
 }
 
-export default Eosdaq
+export default Eosdaq;
