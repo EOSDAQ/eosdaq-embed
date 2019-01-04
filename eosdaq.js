@@ -10,10 +10,10 @@ class Eosdaq {
   renderEosdaq() {
     const div = document.getElementById(this.container);
     this.iframe = document.createElement('iframe');
-    this.childProcess = iframe.contentWindow;
+    this.childProcess = this.iframe.contentWindow;
     iframe.src = `http://eosdaq.test:3000/embed/IQ_SYS`;
 
-    div.appendChild(iframe)
+    div.appendChild(this.iframe)
   }
 
   sendMessage(action, payload) {
