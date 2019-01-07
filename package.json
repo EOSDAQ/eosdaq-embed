@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/bundle.eosdaq.js",
   "scripts": {
-    "dist": "npm run build; npm publish --access=public",
+    "dist": "npm run build && npm publish --access=public",
     "build": "rollup -c"
   },
   "repository": {
