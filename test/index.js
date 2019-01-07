@@ -6,12 +6,12 @@ import ScatterEOS from 'scatterjs-plugin-eosjs';
 
 const network = {
   blockchain: "eos",
-  chainId: "8be32650b763690b95b7d7e32d7637757a0a7392ad04f1c393872e525a2ce82b",
-  host: "nodeos.eosdaq.test",
-  httpEndpoint: "http://nodeos.eosdaq.test:18888",
-  port: "18888",
-  protocol: "http"
-}
+  chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
+  host: "rpc.eosys.io",
+  httpEndpoint: "https://rpc.eosys.io:443",
+  port: 443,
+  protocol: "https"
+};
 
 const eosdaq = new Eosdaq(
   'eosdaq',
@@ -20,19 +20,12 @@ const eosdaq = new Eosdaq(
 
 ScatterJS.plugins(new ScatterEOS())
 ScatterJS.scatter.connect('EOSDAQ')
-  .then(c => {
+  .then(async (c) => {
     if (!c) {
       console.log('Failed to connect');
       return;
     }
-
+    
     const eos = ScatterJS.scatter.eos(network, Eos, {});
     eosdaq.login(ScatterJS.scatter, eos);
-
-    // setTimeout(() => {
-    //   eosdaq.logout();
-    //   setTimeout(() => {
-    //     eosdaq.login(ScatterJS.scatter, eos);
-    //   }, 4000)
-    // }, 1000)
   })

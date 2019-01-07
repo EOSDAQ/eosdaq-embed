@@ -6,12 +6,9 @@ class Eosdaq {
     this.iframe;
     this.queue = [];
     this.isLoaded = false;
-    this.embedDomain = 'http://eosdaq.test:3000';
-    this.embedSource = 'http://eosdaq.test:3000/embed/IQ_SYS';
-    this.network = {
-      blockchain: "eos",
-      chainId: "8be32650b763690b95b7d7e32d7637757a0a7392ad04f1c393872e525a2ce82b",
-    };
+    this.embedDomain = 'https://dev.eosdaq.com';
+    this.embedSource = `${this.embedDomain}/embed/KEOS_EOS`;
+
     this.renderEosdaq();
     this.onMessage = this.onMessage.bind(this);
     window.addEventListener('message', this.onMessage);
@@ -65,7 +62,6 @@ class Eosdaq {
   login(scatter, eos) {
     this.scatter = scatter;
     this.eos = eos;
-    // console.log(this.isLoaded);
     if (this.isLoaded) {
       this.sendMessage('getIdentity', scatter.identity);
     } else {

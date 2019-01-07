@@ -19,9 +19,6 @@
   },
   "homepage": "https://gitlab.com/EOSDAQ/persian-pink#readme",
   "devDependencies": {
-    "babel-polyfill": "^6.26.0",
-    "http-server": "^0.11.1",
-    "parcel-bundler": "^1.11.0",
     "rollup": "^1.0.0",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-json": "^3.1.0",
@@ -29,9 +26,5 @@
     "rollup-plugin-terser": "^4.0.1",
     "rollup-plugin-uglify": "^6.0.0"
   },
-  "dependencies": {
-    "eosjs": "^16.0.9",
-    "scatterjs-core": "^2.6.0",
-    "scatterjs-plugin-eosjs": "^1.4.0"
-  }
+  "dependencies": {}
 }
