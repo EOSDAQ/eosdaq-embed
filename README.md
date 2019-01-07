@@ -2,8 +2,8 @@
 
 ## Installation
 ```
-  npm install @eosdaq/core
-  yarn add @eosdaq/core
+  npm install @eosdaq/embed
+  yarn add @eosdaq/embed
 ```
 
 ## Usage

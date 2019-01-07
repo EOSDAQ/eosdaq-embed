@@ -1,5 +1,5 @@
 import 'babel-polyfill';
-import Eosdaq from '../eosdaq';
+import Eosdaq from '@eosdaq/embed';
 import Eos from 'eosjs';
 import ScatterJS from 'scatterjs-core';
 import ScatterEOS from 'scatterjs-plugin-eosjs';
@@ -30,5 +30,5 @@ ScatterJS.scatter.connect('EOSDAQ')
     'eosdaq',
     {},
   );
-    eosdaq.login(ScatterJS.scatter, eos);
+    // eosdaq.login(ScatterJS.scatter, eos);
   })
