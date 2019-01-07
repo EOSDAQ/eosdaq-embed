@@ -60,6 +60,9 @@ class Eosdaq {
   }
 
   login(scatter, eos) {
+    if (!scatter.identity) {
+      throw new Error('Cannot login with null identity. Use scatter.getIdentity first');
+    }
     this.scatter = scatter;
     this.eos = eos;
     if (this.isLoaded) {

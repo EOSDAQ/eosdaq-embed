@@ -1,5 +1,5 @@
 import 'babel-polyfill';
-import Eosdaq from '@eosdaq/embed';
+import Eosdaq from '../eosdaq';
 import Eos from 'eosjs';
 import ScatterJS from 'scatterjs-core';
 import ScatterEOS from 'scatterjs-plugin-eosjs';
@@ -13,19 +13,19 @@ const network = {
   protocol: "https"
 };
 
-const eosdaq = new Eosdaq(
-  'eosdaq',
-  {},
-);
 
 ScatterJS.plugins(new ScatterEOS())
 ScatterJS.scatter.connect('EOSDAQ')
-  .then(async (c) => {
-    if (!c) {
-      console.log('Failed to connect');
-      return;
-    }
-    
-    const eos = ScatterJS.scatter.eos(network, Eos, {});
+.then(async (c) => {
+  if (!c) {
+    console.log('Failed to connect');
+    return;
+  }
+  
+  const eos = ScatterJS.scatter.eos(network, Eos, {});
+  const eosdaq = new Eosdaq(
+    'eosdaq',
+    {},
+  );
     eosdaq.login(ScatterJS.scatter, eos);
   })
