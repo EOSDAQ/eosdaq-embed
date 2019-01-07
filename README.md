@@ -1,31 +1,24 @@
-# @eosdaq/core
+# @eosdaq/embed
 
-[![](https://img.shields.io/npm/v/npm.svg?style=flat-square)](https://www.npmjs.com/package/@eosdaq/core)
-
-```html
-<body>
-  <div id="eosdaq"></div>
-  <script type="text/javascript" src="./index.js"></script>
-</body>
+## Installation
+```
+  npm install @eosdaq/core
+  yarn add @eosdaq/core
 ```
 
+## Usage
+
 ```javascript
+import Eosdaq from '@eosdaq/embed';
 import Eos from 'eosjs';
 import ScatterJS from 'scatterjs-core';
 import ScatterEOS from 'scatterjs-plugin-eosjs';
 
-const network = {
-  blockchain: "eos",
-  chainId: "8be32650b763690b95b7d7e32d7637757a0a7392ad04f1c393872e525a2ce82b",
-  host: "nodeos.eosdaq.test",
-  httpEndpoint: "http://nodeos.eosdaq.test:18888",
-  port: "18888",
-  protocol: "http"
-}
+const network = { ... }; // https://get-scatter.com/docs/networks
 
 const eosdaq = new Eosdaq(
-  'eosdaq',
-  {},
+  'eosdaq', // id of div for iframe to be rendered.
+  {}, // extra config. currently it is empty object.
 );
 
 ScatterJS.plugins(new ScatterEOS())
@@ -36,7 +29,14 @@ ScatterJS.scatter.connect('EOSDAQ')
       return;
     }
 
-    const eos = ScatterJS.scatter.eos(network, Eos, {});
+    const eos = ScatterJS.scatter.eos(network, Eos, {});  
     eosdaq.login(ScatterJS.scatter, eos);
   })
 ```
+
+## IMPORTANT
+When you call `eosdaq.login`, you have to pass scatter filled with identity property.
+Thus the flow is like this.
+1. `scatter.connect(YOUR_APP_NAME)`
+2. `scatter.getIdentity(...)`
+3. `eosdaq.login(scatter, eos)`
