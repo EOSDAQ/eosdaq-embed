@@ -21,7 +21,10 @@ ScatterJS.scatter.connect('EOSDAQ')
     console.log('Failed to connect');
     return;
   }
-  
+  const { scatter } = ScatterJS;
+  if (scatter.identity === null) {
+    await scatter.getIdentity({ accounts: [ network ]})
+  }
   const eos = ScatterJS.scatter.eos(network, Eos, {});
   const eosdaq = new Eosdaq(
     'eosdaq',
