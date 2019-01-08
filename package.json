@@ -1,6 +1,6 @@
 {
   "name": "@eosdaq/embed",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Embed EOSDAQ exchange into your website.",
   "main": "dist/bundle.eosdaq.js",
   "scripts": {
