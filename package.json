@@ -5,7 +5,8 @@
   "main": "dist/bundle.eosdaq.js",
   "scripts": {
     "dist": "npm run build && npm publish --access=public",
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "build:browser": "rollup -c rollup.browser.js"
   },
   "repository": {
     "type": "git",
