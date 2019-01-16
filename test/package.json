@@ -15,7 +15,7 @@
   "dependencies": {
     "@eosdaq/embed": "^0.1.2",
     "eosjs": "^16.0.9",
-    "scatterjs-core": "^2.6.0",
-    "scatterjs-plugin-eosjs": "^1.4.0"
+    "scatterjs-core": "^2.7.5",
+    "scatterjs-plugin-eosjs": "^1.5.0"
   }
 }
