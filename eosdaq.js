@@ -1,13 +1,20 @@
+/**
+ * config {
+ *  container: 'eosdaq' (Id of div)
+ *  src: 'https://eosdaq.com/embed/
+ * 
+ * 
+ * }
+ */
+
 class Eosdaq {
-  constructor(container, config) {
+  constructor(container, src) {
+    this.src = src;
     this.container = container;
-    this.config = config;
     this.childProcess;
     this.iframe;
     this.queue = [];
     this.isLoaded = false;
-    this.embedDomain = 'https://dev.eosdaq.com';
-    this.embedSource = `${this.embedDomain}/embed/KEOS_EOS`;
 
     this.renderEosdaq();
     this.onMessage = this.onMessage.bind(this);
@@ -28,18 +35,29 @@ class Eosdaq {
     }
   }
 
+  guardConfig(configKey) {
+    if (this[configKey]) {
+      return this[configKey];
+    }
+
+    throw Error(`${configKey} is not found in config`);
+  }
+
   renderEosdaq() {
-    const div = document.getElementById(this.container);
+    const { container, src } = this;
+
+    const div = document.getElementById(container);
     const oldies = div.getElementsByTagName('iframe');
     if (oldies && oldies.length > 0) {
       for (let oldFrame of oldies) {
         div.removeChild(oldFrame);
       }
     }
+
     this.iframe = document.createElement('iframe');
-    this.iframe.src = this.embedSource;
+    this.iframe.src = src;
     this.iframe.frameBorder = 0;
-    // this.iframe.onload = this.onLoad();
+
     div.appendChild(this.iframe);
     this.childProcess = this.iframe.contentWindow;
   }
