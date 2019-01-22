@@ -28,7 +28,11 @@ ScatterJS.scatter.connect('EOSDAQ')
   const eos = ScatterJS.scatter.eos(network, Eos, {});
   const eosdaq = new Eosdaq(
     'eosdaq',
-    {},
+    {
+      // targetDomain: 'http://test.eosdaq.test:3000',
+      tokens: ['OCT_SYS', 'IQ_SYS'],
+      initialToken: 'IQ_SYS'
+    },
   );
 
     eosdaq.login(ScatterJS.scatter, eos);

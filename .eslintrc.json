@@ -1,0 +1,29 @@
+{
+  "extends": "airbnb/base",
+  "rules": {
+    "func-names": ["error", "never"],
+    "import/order": "off",
+    "import/no-unresolved": "off",
+    "no-use-before-define": "off",
+    "no-labels": "off",
+    "no-unused-vars": ["error"],
+    "linebreak-style": 0,
+    "no-restricted-syntax": 0,
+    "no-param-reassign": 0,
+    "import/prefer-default-export": 0,
+    "class-methods-use-this": 0,
+    "no-confusing-arrow": 0,
+    "no-shadow": "off",
+    "no-continue": "off"
+  },
+  "plugins": [
+    "import"
+  ],
+  "env": {
+    "browser": true
+  },
+  "settings": {
+    "import/resolver": {
+    }
+  }
+}
