@@ -22,18 +22,17 @@ ScatterJS.scatter.connect('EOSDAQ')
     return;
   }
   const { scatter } = ScatterJS;
-  if (scatter.identity === null) {
-    await scatter.getIdentity({ accounts: [ network ]})
+  if (!scatter.identity) {
+    await scatter.getIdentity({ accounts: [ network ]});
   }
   const eos = ScatterJS.scatter.eos(network, Eos, {});
   const eosdaq = new Eosdaq(
     'eosdaq',
     {
-      // targetDomain: 'http://test.eosdaq.test:3000',
-      tokens: ['OCT_SYS', 'IQ_SYS'],
-      initialToken: 'IQ_SYS'
+      targetDomain: 'https://dev.eosdaq.com',
+      tokens: ['KEOS_EOS', 'IQ_SYS'],
+      initialToken: 'KEOS_EOS'
     },
   );
-
     eosdaq.login(ScatterJS.scatter, eos);
-  })
+});

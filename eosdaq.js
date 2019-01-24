@@ -8,7 +8,7 @@
 class Eosdaq {
   constructor(container, config) {
     const defaultConfig = {
-      targetDomain: 'https://dev.eosdaq.com',
+      targetUrl: 'https://dev.eosdaq.com',
       tokens: [],
       initialToken: '',
     };
@@ -29,12 +29,14 @@ class Eosdaq {
 
   buildSrcUrl() {
     const {
-      targetDomain, initialToken,
+      targetUrl, initialToken,
     } = this.config;
     let tokens = this.splitTokens();
-    const isEmptyTokens = (!tokens
+    const isEmptyTokens = (
+      !tokens
       || tokens.length < 1
-      || (tokens.length < 2 && !tokens[0]));
+      || (tokens.length < 2 && !tokens[0])
+    );
 
     if (initialToken) {
       if (isEmptyTokens) {
@@ -46,7 +48,7 @@ class Eosdaq {
     if (!firstToken) {
       throw Error('expect initialToken');
     }
-    return `${targetDomain}/embed/${firstToken}?tokenList=${tokens.join('-')}`;
+    return `${targetUrl}/embed/${firstToken}?tokenList=${tokens.join('-')}`;
   }
 
   splitTokens() {
@@ -68,7 +70,7 @@ class Eosdaq {
   }
 
   onMessage(e) {
-    if (e.origin !== this.config.targetDomain) {
+    if (e.origin !== this.config.targetUrl) {
       return;
     }
     const { data } = e;
@@ -111,7 +113,7 @@ class Eosdaq {
     this.childProcess.postMessage({
       action,
       payload,
-    }, this.config.targetDomain);
+    }, this.config.targetUrl);
   }
 
   onLoad() {
