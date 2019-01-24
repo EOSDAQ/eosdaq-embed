@@ -18,7 +18,11 @@ const network = { ... }; // https://get-scatter.com/docs/networks
 
 const eosdaq = new Eosdaq(
   'eosdaq', // id of div for iframe to be rendered.
-  'https://eosdaq.com/embed/ATD', // Src url of embed iframe.
+  {
+    targetUrl: 'https://eosdaq.com', // Target url to load eosdaq embedding page
+    tokens: ['KEOS_EOS', 'IQ_EOS'], // Token list that will be traded 
+    initialToken: 'KEOS_EOS', // Default selected token.
+  }
 );
 
 ScatterJS.plugins(new ScatterEOS())
@@ -32,21 +36,6 @@ ScatterJS.scatter.connect('EOSDAQ')
     const eos = ScatterJS.scatter.eos(network, Eos, {});  
     eosdaq.login(ScatterJS.scatter, eos);
   })
-```
-
-## How to construct iframe src url.
-
-Rule for src url is **eosdaq domain** + **tokens**(connected with '-')
-
-```javascript
-const tokens = [
-  'ATD',
-  'KEOS',
-  'IQ',
-];
-
-const src = `https://eosdaq.com/embed/${tokens.join('-')}`
-// https://eosdaq.com/embed/ATD-KEOS-IQ
 ```
 
 ## IMPORTANT
