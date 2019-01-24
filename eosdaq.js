@@ -124,21 +124,20 @@ class Eosdaq {
     }
   }
 
-  login(scatter, eos) {
-    if (!scatter.identity) {
-      throw new Error('Cannot login with null identity. Use scatter.getIdentity first');
-    }
-    this.scatter = scatter;
-    this.eos = eos;
-    if (this.isLoaded) {
-      this.sendMessage('getIdentity', scatter.identity);
-    } else {
-      this.queue.push(this.sendMessage.bind(this, 'getIdentity', scatter.identity));
+  async login(identity, eos) {
+    if (identity) {
+      this.identity = identity;
+      this.eos = eos;
+      if (this.isLoaded) {
+        this.sendMessage('getIdentity', identity);
+      } else {
+        this.queue.push(this.sendMessage.bind(this, 'getIdentity', identity));
+      }
     }
   }
 
   logout() {
-    this.scatter = null;
+    this.identity = null;
     this.eos = null;
     this.sendMessage('forgetIdentity');
   }
@@ -164,7 +163,7 @@ class Eosdaq {
 
     this.sendMessage(action, payload);
   }
-  
+
   destroy() {
     window.removeEventListener('message', onMessage);
     this.isLoaded = false;
