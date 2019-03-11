@@ -48,4 +48,4 @@ When you call `eosdaq.login`, you have to pass scatter filled with identity prop
 Thus the flow is like this.
 1. `ScatterJS.scatter.connect(YOUR_APP_NAME)`
 2. `ScatterJS.login(...)`
-3. `eosdaq.login(ScatterJs.identity, eos)`
+3. `eosdaq.login({ identity: ScatterJs.identity, eos, origin })`
