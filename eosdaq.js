@@ -11,11 +11,11 @@ class Eosdaq {
       targetUrl: 'https://dev.eosdaq.com',
       tokens: [],
       initialToken: '',
+      origin: '',
     };
 
     this.container = container;
     this.config = Object.assign({}, defaultConfig, config);
-
     this.childProcess = null;
     this.iframe = null;
     this.queue = [];
@@ -24,6 +24,7 @@ class Eosdaq {
 
     this.renderEosdaq();
     this.onMessage = this.onMessage.bind(this);
+    this.validOrigin = {};
     window.addEventListener('message', this.onMessage);
   }
 
@@ -96,7 +97,7 @@ class Eosdaq {
     const div = document.getElementById(container);
     const oldies = div.getElementsByTagName('iframe');
     if (oldies && oldies.length > 0) {
-      for (let oldFrame of oldies) {
+      for (const oldFrame of oldies) {
         div.removeChild(oldFrame);
       }
     }
@@ -124,16 +125,23 @@ class Eosdaq {
     }
   }
 
-  async login(identity, eos) {
+  async login({ identity, eos, origin }) {
     if (identity) {
       this.identity = identity;
-      this.eos = eos;
+      if (eos) {
+        this.eos = eos;
+      }
       if (this.isLoaded) {
         this.sendMessage('getIdentity', identity);
       } else {
         this.queue.push(this.sendMessage.bind(this, 'getIdentity', identity));
       }
     }
+    if (origin) {
+      this.config.origin = origin;
+    }
+    await this.buildValidOrigin();
+    this.validateOrigin(this.config.tokens);
   }
 
   logout() {
@@ -142,11 +150,76 @@ class Eosdaq {
     this.sendMessage('forgetIdentity');
   }
 
+  async buildValidOrigin() {
+    const keys = Object.keys(this.validOrigin);
+    if (keys.length > 0) {
+      return;
+    }
+
+    const { eos } = this;
+    if (!eos) {
+      throw Error('eos is not initialized');
+    }
+
+    const { rows } = await this.eos.getTableRows({
+      code: 'eosdaqmarket',
+      scope: 'eosdaqmarket',
+      table: 'stfee',
+      json: true,
+      limit: -1,
+    });
+
+    rows.forEach((row) => {
+      const { basefee, quotefee, origin } = row;
+      const symbol = quotefee.replace(/[0-9. ]/g, '');
+      const base = basefee.replace(/[0-9. ]/g, '');
+      if (!symbol) {
+        return;
+      }
+      const pair = `${symbol}_${base}`;
+      if (!this.validOrigin[pair]) {
+        this.validOrigin[pair] = {};
+      }
+      this.validOrigin[pair][origin] = true;
+    });
+  }
+
+  validateOrigin(tokens) {
+    const { origin } = this.config;
+    if (!origin || !tokens) {
+      return;
+    }
+    tokens = !tokens.length ? [tokens] : tokens;
+    tokens.forEach((token) => {
+      if (!this.validOrigin[token] || !this.validOrigin[token][origin]) {
+        throw Error(`Your origin(${origin}) is not registered. Use a right origin or send email to contact@eosdaq.com to regist`);
+      }
+    });
+  }
+
+  setOriginOnMemo(action) {
+    if (!this.config.origin) {
+      return;
+    }
+    try {
+      const memo = JSON.parse(action.data.memo);
+      memo.origin = this.config.origin;
+      const memoKeys = Object.keys(memo);
+      const { length } = memoKeys;
+      action.data.memo = `{ ${memoKeys.map((key, index) => `"${key}": "${memo[key]}"${index !== length - 1 ? ', ' : ''}`).join('')} }`;
+    } catch (e) {
+      return action;
+    }
+  }
+
   async transaction(tx) {
     const action = 'transactionResult';
     let payload;
-
     try {
+      for (const action of tx.actions) {
+        this.setOriginOnMemo(action);
+      }
+
       const result = await this.eos.transaction(tx);
       payload = {
         success: true,
@@ -157,7 +230,7 @@ class Eosdaq {
       payload = {
         success: false,
         data: null,
-        error,
+        error: error.toString(),
       }
     }
 
@@ -165,7 +238,7 @@ class Eosdaq {
   }
 
   destroy() {
-    window.removeEventListener('message', onMessage);
+    window.removeEventListener('message', this.onMessage);
     this.isLoaded = false;
   }
 }

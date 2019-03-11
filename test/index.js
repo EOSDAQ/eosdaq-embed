@@ -33,5 +33,10 @@ ScatterJS.scatter.connect('EOSDAQ', { network: network1 })
         initialToken: 'KEOS_EOS',
       },
     );
-    eosdaq.login(ScatterJS.identity, eos);
+
+    eosdaq.login({
+      identity: ScatterJS.identity,
+      origin: 'eosdaq.test',
+      eos,
+    });
   });

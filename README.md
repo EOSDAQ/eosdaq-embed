@@ -35,7 +35,11 @@ ScatterJS.scatter.connect('EOSDAQ', { network: network1 })
     }
 
     const eos = ScatterJS.scatter.eos(network, Eos, {});
-    eosdaq.login(ScatterJS.identity, eos);
+    eosdaq.login({
+      identity: ScatterJS.identity,
+      origin: 'some.com', // Optional. Your origin to add on memo
+      eos,
+    });
   })
 ```
 
