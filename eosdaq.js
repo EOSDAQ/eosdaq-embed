@@ -74,9 +74,9 @@ class Eosdaq {
     if (e.origin !== this.config.targetUrl) {
       return;
     }
-    const { data } = e;
+    const { data, ports } = e;
     if (data.action === 'transaction') {
-      this.transaction(data.payload);
+      this.transaction(data.payload, ports);
     }
     if (data.action === 'ready') {
       this.onLoad();
@@ -110,11 +110,18 @@ class Eosdaq {
     this.childProcess = this.iframe.contentWindow;
   }
 
-  sendMessage(action, payload) {
-    this.childProcess.postMessage({
+  sendMessage(action, payload, ports) {
+    const message = {
       action,
       payload,
-    }, this.config.targetUrl);
+    };
+
+    if (ports && ports[0]) {
+      ports[0].postMessage(message);
+      return;
+    }
+
+    this.childProcess.postMessage(message, this.config.targetUrl);
   }
 
   onLoad() {
@@ -212,8 +219,7 @@ class Eosdaq {
     }
   }
 
-  async transaction(tx) {
-    const action = 'transactionResult';
+  async transaction(tx, ports) {
     let payload;
     try {
       for (const action of tx.actions) {
@@ -233,8 +239,8 @@ class Eosdaq {
         error: error.toString(),
       }
     }
-
-    this.sendMessage(action, payload);
+    const action = 'transactionResult';
+    this.sendMessage(action, payload, ports);
   }
 
   destroy() {
