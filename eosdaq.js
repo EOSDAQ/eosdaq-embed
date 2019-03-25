@@ -12,6 +12,7 @@ class Eosdaq {
       tokens: [],
       initialToken: '',
       origin: '',
+      theme: '',
     };
 
     this.container = container;
@@ -30,9 +31,11 @@ class Eosdaq {
 
   buildSrcUrl() {
     const {
-      targetUrl, initialToken,
+      targetUrl, initialToken, theme,
     } = this.config;
     let tokens = this.splitTokens();
+    let themeQuery;
+
     const isEmptyTokens = (
       !tokens
       || tokens.length < 1
@@ -45,11 +48,15 @@ class Eosdaq {
       }
     }
 
+    if (theme) {
+      themeQuery = `&theme=${theme}`;
+    }
+
     const firstToken = initialToken || tokens[0];
     if (!firstToken) {
       throw Error('expect initialToken');
     }
-    return `${targetUrl}/embed/${firstToken}?tokenList=${tokens.join('-')}`;
+    return `${targetUrl}/embed/${firstToken}?tokenList=${tokens.join('-')}${themeQuery}`;
   }
 
   splitTokens() {

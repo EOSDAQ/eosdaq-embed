@@ -31,6 +31,7 @@ ScatterJS.scatter.connect('EOSDAQ', { network: network1 })
         targetUrl: 'https://dev.eosdaq.com',
         tokens: ['KEOS_EOS', 'TPT_EOS'],
         initialToken: 'KEOS_EOS',
+        theme: 'light',
       },
     );
 

@@ -23,6 +23,7 @@ const eosdaq = new Eosdaq(
     targetUrl: 'https://eosdaq.com', // Target url to load eosdaq embedding page
     tokens: ['KEOS_EOS', 'TPT_EOS'], // Token list that will be traded 
     initialToken: 'KEOS_EOS', // Default selected token.
+    theme: 'dark' // Optional. Only 'light' and 'dark' are available.
   }
 );
 
