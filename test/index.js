@@ -28,10 +28,11 @@ ScatterJS.scatter.connect('EOSDAQ', { network: network1 })
     const eosdaq = new Eosdaq(
       'eosdaq',
       {
-        targetUrl: 'https://dev.eosdaq.com',
-        tokens: ['KEOS_EOS', 'TPT_EOS'],
-        initialToken: 'KEOS_EOS',
+        targetUrl: 'https://eosdaq.com',
+        tokens: [],
+        initialToken: 'PTI_EOS',
         theme: 'light',
+        locale: 'en',
       },
     );
 

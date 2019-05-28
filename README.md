@@ -21,9 +21,10 @@ const eosdaq = new Eosdaq(
   'eosdaq', // id of div for iframe to be rendered.
   {
     targetUrl: 'https://eosdaq.com', // Target url to load eosdaq embedding page
-    tokens: ['KEOS_EOS', 'TPT_EOS'], // Token list that will be traded 
+    tokens: ['KEOS_EOS', 'TPT_EOS'], // Token list that will be traded. An Empty array will show all tokens.
     initialToken: 'KEOS_EOS', // Default selected token.
     theme: 'dark' // Optional. Only 'light' and 'dark' are available.
+    locale: 'en' // Optional. 'en', 'cn', 'hk' and 'ko' are available.
   }
 );
 

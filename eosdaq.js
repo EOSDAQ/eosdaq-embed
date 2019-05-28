@@ -13,6 +13,7 @@ class Eosdaq {
       initialToken: '',
       origin: '',
       theme: '',
+      locale: '',
     };
 
     this.container = container;
@@ -31,10 +32,11 @@ class Eosdaq {
 
   buildSrcUrl() {
     const {
-      targetUrl, initialToken, theme,
+      targetUrl, initialToken, theme, locale,
     } = this.config;
     let tokens = this.splitTokens();
-    let themeQuery;
+    let themeQuery = '';
+    let localeQuery = '';
 
     const isEmptyTokens = (
       !tokens
@@ -52,11 +54,15 @@ class Eosdaq {
       themeQuery = `&theme=${theme}`;
     }
 
+    if (locale) {
+      localeQuery = `&locale=${locale}`;
+    }
+
     const firstToken = initialToken || tokens[0];
     if (!firstToken) {
       throw Error('expect initialToken');
     }
-    return `${targetUrl}/embed/${firstToken}?tokenList=${tokens.join('-')}${themeQuery}`;
+    return `${targetUrl}/embed/${firstToken}?tokenList=${tokens.join('-')}${themeQuery}${localeQuery}`;
   }
 
   splitTokens() {
@@ -206,7 +212,7 @@ class Eosdaq {
     tokens = !tokens.length ? [tokens] : tokens;
     tokens.forEach((token) => {
       if (!this.validOrigin[token] || !this.validOrigin[token][origin]) {
-        throw Error(`Your origin(${origin}) is not registered. Use a right origin or send email to contact@eosdaq.com to regist`);
+        console.error(`Your origin(${origin}) is not registered. Use a right origin or send email to contact@eosdaq.com to regist`);
       }
     });
   }
