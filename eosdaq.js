@@ -11,7 +11,7 @@ class Eosdaq {
       targetUrl: 'https://eosdaq.com',
       tokens: [],
       initialToken: '',
-      origin: '',
+      origin: 'eosdaq.com',
       theme: '',
       locale: '',
     };
@@ -180,11 +180,11 @@ class Eosdaq {
 
     const { eos } = this;
     if (!eos) {
-      console.error('eos is not injected');
+      console.log('eos is not injected');
       return;
     }
 
-    const { rows } = await this.eos.getTableRows({
+    const { rows } = await eos.getTableRows({
       code: 'eosdaqmarket',
       scope: 'eosdaqmarket',
       table: 'stfee',
