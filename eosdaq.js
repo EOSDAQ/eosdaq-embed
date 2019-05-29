@@ -47,7 +47,7 @@ class Eosdaq {
 
     if (initialToken) {
       if (isEmptyTokens) {
-        tokens = [initialToken];
+        tokens = [];
       }
     }
 
@@ -59,10 +59,7 @@ class Eosdaq {
       localeQuery = `&locale=${locale}`;
     }
 
-    const firstToken = initialToken || tokens[0];
-    if (!firstToken) {
-      throw Error('expect initialToken');
-    }
+    const firstToken = initialToken || tokens[0] || '';
     return `${targetUrl}/embed/${firstToken}?tokenList=${tokens.join('-')}${themeQuery}${localeQuery}`;
   }
 
