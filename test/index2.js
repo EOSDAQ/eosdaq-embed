@@ -36,9 +36,22 @@ ScatterJS.scatter.connect('EOSDAQ', { network: network1 })
       },
     );
 
+    const { identity } = ScatterJS;
+    const { accounts: [account] } = identity;
+
     eosdaq.login({
-      identity: ScatterJS.identity,
+      identity: {
+      	accounts: [{
+      		authority: account.authority,
+      		name: account.name,
+      		publickey: account.publickey,
+      	}],
+      },
       origin: 'eosdaq.com',
       eos,
+      transactionCb: async (tx) => {
+				const result = await eos.transaction(tx);
+				return result;
+			},
     });
   });

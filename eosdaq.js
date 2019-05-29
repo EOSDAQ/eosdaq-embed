@@ -8,7 +8,7 @@
 class Eosdaq {
   constructor(container, config) {
     const defaultConfig = {
-      targetUrl: 'https://dev.eosdaq.com',
+      targetUrl: 'https://eosdaq.com',
       tokens: [],
       initialToken: '',
       origin: '',
@@ -27,6 +27,7 @@ class Eosdaq {
     this.renderEosdaq();
     this.onMessage = this.onMessage.bind(this);
     this.validOrigin = {};
+    this.transactionCb = null;
     window.addEventListener('message', this.onMessage);
   }
 
@@ -145,11 +146,14 @@ class Eosdaq {
     }
   }
 
-  async login({ identity, eos, origin }) {
+  async login({ identity, eos, origin, transactionCb }) {
     if (identity) {
       this.identity = identity;
       if (eos) {
         this.eos = eos;
+      }
+      if (transactionCb) {
+        this.transactionCb = transactionCb;
       }
       if (this.isLoaded) {
         this.sendMessage('getIdentity', identity);
@@ -167,6 +171,7 @@ class Eosdaq {
   logout() {
     this.identity = null;
     this.eos = null;
+    this.transactionCb = null;
     this.sendMessage('forgetIdentity');
   }
 
@@ -178,7 +183,8 @@ class Eosdaq {
 
     const { eos } = this;
     if (!eos) {
-      throw Error('eos is not initialized');
+      console.error('eos is not injected');
+      return;
     }
 
     const { rows } = await this.eos.getTableRows({
@@ -211,7 +217,7 @@ class Eosdaq {
     }
     tokens = !tokens.length ? [tokens] : tokens;
     tokens.forEach((token) => {
-      if (!this.validOrigin[token] || !this.validOrigin[token][origin]) {
+      if (!this.validOrigin || !this.validOrigin[token] || !this.validOrigin[token][origin]) {
         console.error(`Your origin(${origin}) is not registered. Use a right origin or send email to contact@eosdaq.com to regist`);
       }
     });
@@ -234,12 +240,19 @@ class Eosdaq {
 
   async transaction(tx, ports) {
     let payload;
+
     try {
       for (const action of tx.actions) {
         this.setOriginOnMemo(action);
       }
+      let result;
+      if (typeof this.transactionCb === 'function') {
+        result = await this.transactionCb(tx);
 
-      const result = await this.eos.transaction(tx);
+      } else {
+        result = await this.eos.transaction(tx);
+      }
+
       payload = {
         success: true,
         data: result,
