@@ -8,7 +8,7 @@
 
 ## Usage 
 
-1.Initialize eosdaq module
+1. Initialize eosdaq module
 ```javascript
 const eosdaq = new Eosdaq(
   'eosdaq', // id of div for iframe to be rendered.
@@ -22,7 +22,7 @@ const eosdaq = new Eosdaq(
 );
 ```
 
-2.Login and add callback function for transaction data
+2. Login and add callback function for transaction data
 ```javascript 
   eosdaq.login({
     identity: {
@@ -53,8 +53,13 @@ or (if you use only Scatter interface)
 ```
 In this case, transaction will be excuted in library with eos object.
 
-3.Logout
+3. Logout
 ```javascript
   eosdaq.logout();
 ```
 
+## API
+-  changeLanguage(language)
+```javascript
+  eosdaq.changeLanguage('en'); // 'en', 'cn', 'hk', 'ko'
+```
