@@ -266,6 +266,10 @@ class Eosdaq {
     this.sendMessage(action, payload, ports);
   }
 
+  changeLanguage(lang) {
+    this.sendMessage('changeLanguage', lang);
+  }
+
   destroy() {
     window.removeEventListener('message', this.onMessage);
     this.isLoaded = false;
