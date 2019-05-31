@@ -209,7 +209,7 @@ class Eosdaq {
 
   validateOrigin(tokens) {
     const { origin } = this.config;
-    if (!origin || !tokens) {
+    if (!origin || !tokens || !this.eos) {
       return;
     }
     tokens = !tokens.length ? [tokens] : tokens;
